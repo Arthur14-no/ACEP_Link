@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalonController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PrivateMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,6 +28,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/salons/{salon}', [SalonController::class, 'show'])->name('salons.show');
     Route::post('/salons/{salon}/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/salons/{salon}/messages/nouveaux', [MessageController::class, 'nouveaux'])->name('messages.nouveaux');
+
+    Route::get('/messages', [PrivateMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{utilisateur}', [PrivateMessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{utilisateur}', [PrivateMessageController::class, 'store'])->name('messages.privees.store');
+    Route::get('/messages/{utilisateur}/nouveaux', [PrivateMessageController::class, 'nouveaux'])->name('messages.privees.nouveaux');
 });
 
 require __DIR__.'/auth.php';

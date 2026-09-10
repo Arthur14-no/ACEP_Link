@@ -5,7 +5,7 @@
 
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="border rounded p-4 h-96 overflow-y-auto mb-4 space-y-2 bg-white">
+            <div id="messages-container" data-dernier-id="{{ $messages->last()->id ?? 0 }}" class="border rounded p-4 h-96 overflow-y-auto mb-4 space-y-2 bg-white">
                 @foreach($messages as $message)
                     <div>
                         <strong>{{ $message->expediteur->name }}</strong>
@@ -22,4 +22,43 @@
             </form>
         </div>
     </div>
-</x-app-layout> 
+
+    <script>
+        const container = document.getElementById('messages-container');
+        const salonId = {{ $salon->id }};
+        let dernierId = container.dataset.dernierId;
+
+        function chargerNouveauxMessages() {
+            fetch(`/salons/${salonId}/messages/nouveaux?apres=${dernierId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(message => {
+                        const div = document.createElement('div');
+
+                        const auteur = document.createElement('strong');
+                        auteur.textContent = message.auteur;
+
+                        const heure = document.createElement('span');
+                        heure.className = 'text-xs text-gray-500';
+                        heure.textContent = ' ' + message.heure;
+
+                        const contenu = document.createElement('p');
+                        contenu.textContent = message.contenu;
+
+                        div.appendChild(auteur);
+                        div.appendChild(heure);
+                        div.appendChild(contenu);
+                        container.appendChild(div);
+
+                        dernierId = message.id;
+                    });
+
+                    if (messages.length > 0) {
+                        container.scrollTop = container.scrollHeight;
+                    }
+                });
+        }
+
+        setInterval(chargerNouveauxMessages, 3000);
+    </script>
+</x-app-layout>

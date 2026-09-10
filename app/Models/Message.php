@@ -14,6 +14,11 @@ class Message extends Model
         return $this->belongsTo(User::class, 'expediteur_id');
     }
 
+    public function destinataire(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'destinataire_id');
+    }
+
     public function salon(): BelongsTo
     {
         return $this->belongsTo(Salon::class);
