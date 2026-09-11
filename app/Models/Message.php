@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Message extends Model
 {
-    protected $fillable = ['contenu', 'expediteur_id', 'salon_id', 'destinataire_id'];
+    protected $fillable = ['contenu', 'expediteur_id', 'salon_id', 'destinataire_id', 'document_id'];
 
     public function expediteur(): BelongsTo
     {
@@ -22,5 +22,10 @@ class Message extends Model
     public function salon(): BelongsTo
     {
         return $this->belongsTo(Salon::class);
+    }
+
+    public function document(): BelongsTo
+    {
+        return $this->belongsTo(Document::class);
     }
 }

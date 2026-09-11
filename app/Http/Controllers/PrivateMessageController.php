@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,18 +17,43 @@ class PrivateMessageController extends Controller
 
     public function show(User $utilisateur)
     {
-        $messages = $this->conversation($utilisateur)->with('expediteur')->oldest()->get();
+        $messages = $this->conversation($utilisateur)->with(['expediteur', 'document'])->oldest()->get();
         return view('messages.show', compact('utilisateur', 'messages'));
     }
 
     public function store(Request $request, User $utilisateur)
     {
-        $validated = $request->validate(['contenu' => 'required|string|max:2000']);
+        $validated = $request->validate([
+            'contenu' => 'nullable|string|max:2000',
+            'fichier' => 'nullable|file|max:10240',
+        ]);
+
+        if (empty($validated['contenu']) && !$request->hasFile('fichier')) {
+            return back()->withErrors(['contenu' => 'Écris un message ou joins un fichier.']);
+        }
+
+        $documentId = null;
+
+        if ($request->hasFile('fichier')) {
+            $fichier = $request->file('fichier');
+            $chemin = $fichier->store('documents', 'local');
+
+            $document = Document::create([
+                'nom_original' => $fichier->getClientOriginalName(),
+                'chemin' => $chemin,
+                'type_mime' => $fichier->getClientMimeType(),
+                'taille' => $fichier->getSize(),
+                'depose_par' => auth()->id(),
+            ]);
+
+            $documentId = $document->id;
+        }
 
         Message::create([
-            'contenu' => $validated['contenu'],
+            'contenu' => $validated['contenu'] ?? '',
             'expediteur_id' => auth()->id(),
             'destinataire_id' => $utilisateur->id,
+            'document_id' => $documentId,
         ]);
 
         return back();
@@ -39,7 +65,7 @@ class PrivateMessageController extends Controller
 
         $messages = $this->conversation($utilisateur)
             ->where('id', '>', $dernierId)
-            ->with('expediteur')
+            ->with(['expediteur', 'document'])
             ->oldest()
             ->get();
 
@@ -50,6 +76,10 @@ class PrivateMessageController extends Controller
                     'auteur' => $message->expediteur->name,
                     'contenu' => $message->contenu,
                     'heure' => $message->created_at->format('H:i'),
+                    'document' => $message->document ? [
+                        'nom' => $message->document->nom_original,
+                        'url' => route('documents.download', $message->document),
+                    ] : null,
                 ];
             })
         );
@@ -57,9 +87,6 @@ class PrivateMessageController extends Controller
 
     private function conversation(User $utilisateur)
     {
-        // Tout regroupé dans UN SEUL where() pour que les ->where() enchaînés
-        // ensuite (comme le filtre "id > dernierId") s'appliquent bien à
-        // l'ensemble du groupe OR, et pas juste à sa seconde moitié.
         return Message::where(function ($query) use ($utilisateur) {
             $query->where(function ($q) use ($utilisateur) {
                     $q->where('expediteur_id', auth()->id())
