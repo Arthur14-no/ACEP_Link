@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Annonce;
+use App\Models\Journal;
 use Illuminate\Http\Request;
 
 class AnnonceController extends Controller
@@ -25,7 +26,9 @@ class AnnonceController extends Controller
             'contenu' => 'required|string',
         ]);
 
-        Annonce::create([...$validated, 'publie_par' => auth()->id()]);
+        $annonce = Annonce::create([...$validated, 'publie_par' => auth()->id()]);
+
+        Journal::enregistrer('publication_annonce', "Annonce \"{$annonce->titre}\" publiée");
 
         return redirect()->route('annonces.index')->with('success', 'Annonce publiée.');
     }
@@ -35,6 +38,8 @@ class AnnonceController extends Controller
         if (!in_array(auth()->user()->role, ['administrateur', 'moderateur'])) {
             abort(403, 'Action non autorisée.');
         }
+
+        Journal::enregistrer('suppression_annonce', "Annonce \"{$annonce->titre}\" supprimée");
 
         $annonce->delete();
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Journal;
 use App\Models\Salon;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,9 @@ class SalonController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        Salon::create([...$validated, 'cree_par' => auth()->id()]);
+        $salon = Salon::create([...$validated, 'cree_par' => auth()->id()]);
+
+        Journal::enregistrer('creation_salon', "Salon \"{$salon->nom}\" créé");
 
         return redirect()->route('salons.index')->with('success', 'Salon créé.');
     }

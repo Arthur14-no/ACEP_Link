@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Journal;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,10 @@ class AdminUserController extends Controller
             'role' => 'required|in:utilisateur,moderateur,administrateur',
         ]);
 
+        $ancienRole = $utilisateur->role;
         $utilisateur->update(['role' => $validated['role']]);
+
+        Journal::enregistrer('changement_role', "Rôle de {$utilisateur->name} changé de \"{$ancienRole}\" à \"{$validated['role']}\"");
 
         return back()->with('success', 'Rôle mis à jour pour ' . $utilisateur->name . '.');
     }

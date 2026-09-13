@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\Journal;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -35,13 +36,15 @@ class DocumentController extends Controller
         $fichier = $request->file('fichier');
         $cheminStocke = $fichier->store('documents', 'local');
 
-        Document::create([
+        $document = Document::create([
             'nom_original' => $fichier->getClientOriginalName(),
             'chemin' => $cheminStocke,
             'type_mime' => $fichier->getClientMimeType(),
             'taille' => $fichier->getSize(),
             'depose_par' => auth()->id(),
         ]);
+
+        Journal::enregistrer('depot_document', "Document \"{$document->nom_original}\" déposé");
 
         return redirect()->route('documents.index')->with('success', 'Document déposé avec succès.');
     }
@@ -67,6 +70,8 @@ class DocumentController extends Controller
         if ($document->depose_par !== auth()->id() && !in_array(auth()->user()->role, ['administrateur', 'moderateur'])) {
             abort(403, 'Action non autorisée.');
         }
+
+        Journal::enregistrer('suppression_document', "Document \"{$document->nom_original}\" supprimé");
 
         Storage::disk('local')->delete($document->chemin);
         $document->delete();
