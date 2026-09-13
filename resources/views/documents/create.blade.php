@@ -19,7 +19,7 @@
                     <label class="block text-sm font-medium">Fichier (PDF, Word, Excel, image — 10 Mo max)</label>
                     <input type="file" name="fichier" class="w-full border rounded px-3 py-2" required>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Déposer</button>
+                <button type="submit" class="bg-acep-dark hover:bg-acep-dark/90 text-white px-4 py-2 rounded">Déposer</button>
             </form>
         </div>
     </div>

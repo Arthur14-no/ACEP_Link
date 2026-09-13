@@ -10,7 +10,7 @@
             @endif
 
             @if(in_array(auth()->user()->role, ['administrateur','moderateur']))
-                <a href="{{ route('annonces.create') }}" class="text-blue-600">+ Nouvelle annonce</a>
+                <a href="{{ route('annonces.create') }}" class="text-acep-dark font-medium hover:underline">+ Nouvelle annonce</a>
             @endif
 
             <div class="space-y-4 mt-4">

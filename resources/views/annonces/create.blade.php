@@ -9,13 +9,13 @@
                 @csrf
                 <div>
                     <label class="block text-sm font-medium">Titre</label>
-                    <input type="text" name="titre" class="w-full border rounded px-3 py-2" required>
+                    <input type="text" name="titre" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light" required>
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Contenu</label>
-                    <textarea name="contenu" rows="6" class="w-full border rounded px-3 py-2" required></textarea>
+                    <textarea name="contenu" rows="6" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light" required></textarea>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Publier</button>
+                <button type="submit" class="bg-acep-dark hover:bg-acep-dark/90 text-white px-4 py-2 rounded">Publier</button>
             </form>
         </div>
     </div>

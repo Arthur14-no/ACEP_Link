@@ -10,7 +10,7 @@
             @endif
 
             @if(in_array(auth()->user()->role, ['administrateur','moderateur']))
-                <a href="{{ route('documents.create') }}" class="text-blue-600">+ Déposer un document</a>
+                <a href="{{ route('documents.create') }}" class="text-acep-dark font-medium hover:underline">+ Déposer un document</a>
             @endif
 
             <table class="w-full bg-white border rounded mt-4">
@@ -31,7 +31,7 @@
                             <td class="p-3">{{ round($document->taille / 1024) }} Ko</td>
                             <td class="p-3">{{ $document->created_at->format('d/m/Y H:i') }}</td>
                             <td class="p-3 flex gap-2">
-                                <a href="{{ route('documents.download', $document) }}" class="text-blue-600">Télécharger</a>
+                                <a href="{{ route('documents.download', $document) }}" class="text-acep-dark hover:underline">Télécharger</a>
                                 @if($document->depose_par === auth()->id() || in_array(auth()->user()->role, ['administrateur','moderateur']))
                                     <form method="POST" action="{{ route('documents.destroy', $document) }}" onsubmit="return confirm('Supprimer ce document ?');">
                                         @csrf

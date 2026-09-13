@@ -9,17 +9,17 @@
                 @csrf
                 <div>
                     <label class="block text-sm font-medium">Nom du salon</label>
-                    <input type="text" name="nom" class="w-full border rounded px-3 py-2" required>
+                    <input type="text" name="nom" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light" required>
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Service (optionnel)</label>
-                    <input type="text" name="service" class="w-full border rounded px-3 py-2">
+                    <input type="text" name="service" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light">
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Description (optionnel)</label>
-                    <textarea name="description" class="w-full border rounded px-3 py-2"></textarea>
+                    <textarea name="description" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light"></textarea>
                 </div>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Créer</button>
+                <button type="submit" class="bg-acep-dark hover:bg-acep-dark/90 text-white px-4 py-2 rounded">Créer</button>
             </form>
         </div>
     </div>

@@ -17,8 +17,8 @@
 
             <form method="POST" action="{{ route('messages.store', $salon) }}" class="flex gap-2">
                 @csrf
-                <input type="text" name="contenu" class="flex-1 border rounded px-3 py-2" placeholder="Écris un message..." required>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Envoyer</button>
+                <input type="text" name="contenu" class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light" placeholder="Écris un message..." required>
+                <button type="submit" class="bg-acep-dark hover:bg-acep-dark/90 text-white px-4 py-2 rounded">Envoyer</button>
             </form>
         </div>
     </div>

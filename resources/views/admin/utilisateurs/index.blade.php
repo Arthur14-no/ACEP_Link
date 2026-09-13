@@ -38,7 +38,7 @@
                                             <option value="moderateur" @selected($utilisateur->role === 'moderateur')>Modérateur</option>
                                             <option value="administrateur" @selected($utilisateur->role === 'administrateur')>Administrateur</option>
                                         </select>
-                                        <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Modifier</button>
+                                        <button type="submit" class="bg-acep-dark hover:bg-acep-dark/90 text-white px-3 py-1 rounded text-sm">Modifier</button>
                                     </form>
                                 @endif
                             </td>
