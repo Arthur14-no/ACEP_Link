@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
-use App\Models\Journal;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -44,8 +43,6 @@ class DocumentController extends Controller
             'depose_par' => auth()->id(),
         ]);
 
-        Journal::enregistrer('depot_document', "Document \"{$document->nom_original}\" déposé");
-
         return redirect()->route('documents.index')->with('success', 'Document déposé avec succès.');
     }
 
@@ -53,12 +50,18 @@ class DocumentController extends Controller
     {
         $message = Message::where('document_id', $document->id)->first();
 
-        if ($message && $message->destinataire_id) {
-            $autorise = in_array(auth()->id(), [$message->expediteur_id, $message->destinataire_id])
-                || auth()->user()->role === 'administrateur';
+        if ($message) {
+            if ($message->destinataire_id) {
+                $autorise = in_array(auth()->id(), [$message->expediteur_id, $message->destinataire_id])
+                    || auth()->user()->role === 'administrateur';
 
-            if (!$autorise) {
-                abort(403, 'Accès non autorisé à ce document.');
+                if (!$autorise) {
+                    abort(403, 'Accès non autorisé à ce document.');
+                }
+            } elseif ($message->salon_id) {
+                if (!$message->salon->estVisiblePour(auth()->user())) {
+                    abort(403, 'Accès non autorisé à ce document.');
+                }
             }
         }
 
@@ -70,8 +73,6 @@ class DocumentController extends Controller
         if ($document->depose_par !== auth()->id() && !in_array(auth()->user()->role, ['administrateur', 'moderateur'])) {
             abort(403, 'Action non autorisée.');
         }
-
-        Journal::enregistrer('suppression_document', "Document \"{$document->nom_original}\" supprimé");
 
         Storage::disk('local')->delete($document->chemin);
         $document->delete();

@@ -12,12 +12,28 @@ class PrivateMessageController extends Controller
     public function index()
     {
         $utilisateurs = User::where('id', '!=', auth()->id())->orderBy('name')->get();
+
+        $nonLusParExpediteur = Message::where('destinataire_id', auth()->id())
+            ->whereNull('lu_a')
+            ->distinct()
+            ->pluck('expediteur_id');
+
+        $utilisateurs->each(function ($utilisateur) use ($nonLusParExpediteur) {
+            $utilisateur->non_lu = $nonLusParExpediteur->contains($utilisateur->id);
+        });
+
         return view('messages.index', compact('utilisateurs'));
     }
 
     public function show(User $utilisateur)
     {
         $messages = $this->conversation($utilisateur)->with(['expediteur', 'document'])->oldest()->get();
+
+        Message::where('destinataire_id', auth()->id())
+            ->where('expediteur_id', $utilisateur->id)
+            ->whereNull('lu_a')
+            ->update(['lu_a' => now()]);
+
         return view('messages.show', compact('utilisateur', 'messages'));
     }
 
@@ -68,6 +84,11 @@ class PrivateMessageController extends Controller
             ->with(['expediteur', 'document'])
             ->oldest()
             ->get();
+
+        Message::where('destinataire_id', auth()->id())
+            ->where('expediteur_id', $utilisateur->id)
+            ->whereNull('lu_a')
+            ->update(['lu_a' => now()]);
 
         return response()->json(
             $messages->map(function ($message) {

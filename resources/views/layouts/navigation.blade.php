@@ -21,11 +21,17 @@
         <x-sidebar-link :href="route('annonces.index')" :active="request()->routeIs('annonces.*')">
             {{ __('Annonces') }}
         </x-sidebar-link>
-        <x-sidebar-link :href="route('salons.index')" :active="request()->routeIs('salons.*')">
-            {{ __('Salons') }}
+        <x-sidebar-link :href="route('salons.index')" :active="request()->routeIs('salons.*')" class="justify-between">
+            <span>{{ __('Salons') }}</span>
+            @if($salonsNonLus > 0)
+                <span class="bg-acep-light text-acep-dark text-xs font-bold px-2 py-0.5 rounded-full">{{ $salonsNonLus }}</span>
+            @endif
         </x-sidebar-link>
-        <x-sidebar-link :href="route('messages.index')" :active="request()->routeIs('messages.index') || request()->routeIs('messages.show')">
-            {{ __('Messages') }}
+        <x-sidebar-link :href="route('messages.index')" :active="request()->routeIs('messages.index') || request()->routeIs('messages.show')" class="justify-between">
+            <span>{{ __('Messages') }}</span>
+            @if($messagesNonLus > 0)
+                <span class="bg-acep-light text-acep-dark text-xs font-bold px-2 py-0.5 rounded-full">{{ $messagesNonLus }}</span>
+            @endif
         </x-sidebar-link>
         <x-sidebar-link :href="route('documents.index')" :active="request()->routeIs('documents.*')">
             {{ __('Documents') }}

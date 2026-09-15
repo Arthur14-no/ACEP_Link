@@ -12,8 +12,21 @@
                     <input type="text" name="nom" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium">Service (optionnel)</label>
-                    <input type="text" name="service" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light">
+                    <label class="block text-sm font-medium">Visibilité</label>
+                    <select name="visibilite" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light" required>
+                        <option value="public">Public — tous les employés voient et écrivent</option>
+                        <option value="public_lecture_seule">Public en lecture seule — tous voient, seuls admin/modérateurs écrivent</option>
+                        <option value="prive">Privé — seulement les membres autorisés</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Service concerné (optionnel, informatif)</label>
+                    <select name="service_id" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-acep-light focus:border-acep-light">
+                        <option value="">Aucun / transverse</option>
+                        @foreach($services as $service)
+                            <option value="{{ $service->id }}">{{ $service->nom }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Description (optionnel)</label>

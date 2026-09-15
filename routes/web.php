@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalonController;
+use App\Http\Controllers\SalonMembreController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PrivateMessageController;
 use App\Http\Controllers\AdminUserController;
@@ -58,7 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:administrateur')->group(function () {
         Route::get('/admin/utilisateurs', [AdminUserController::class, 'index'])->name('admin.utilisateurs.index');
         Route::patch('/admin/utilisateurs/{utilisateur}', [AdminUserController::class, 'updateRole'])->name('admin.utilisateurs.updateRole');
+        Route::patch('/admin/utilisateurs/{utilisateur}/service', [AdminUserController::class, 'updateService'])->name('admin.utilisateurs.updateService');
         Route::get('/admin/journal', [JournalController::class, 'index'])->name('admin.journal.index');
+
+        Route::get('/admin/salons/{salon}/membres', [SalonMembreController::class, 'index'])->name('admin.salons.membres.index');
+        Route::post('/admin/salons/{salon}/membres', [SalonMembreController::class, 'store'])->name('admin.salons.membres.store');
+        Route::delete('/admin/salons/{salon}/membres/{utilisateur}', [SalonMembreController::class, 'destroy'])->name('admin.salons.membres.destroy');
     });
 });
 
