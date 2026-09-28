@@ -78,25 +78,26 @@
     </div>
 
     @if(auth()->user()->role === 'administrateur')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script>
-            const ctx = document.getElementById('graphiqueActivite');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: @json($labels),
-                    datasets: [{
-                        label: 'Actions enregistrées',
-                        data: @json($valeurs),
-                        borderColor: '#00564b',
-                        backgroundColor: 'rgba(80, 194, 187, 0.25)',
-                        fill: true,
-                        tension: 0.3,
-                    }]
-                },
-                options: {
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-                }
+            document.addEventListener('DOMContentLoaded', () => {
+                const ctx = document.getElementById('graphiqueActivite');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: @json($labels),
+                        datasets: [{
+                            label: 'Actions enregistrées',
+                            data: @json($valeurs),
+                            borderColor: '#00564b',
+                            backgroundColor: 'rgba(80, 194, 187, 0.25)',
+                            fill: true,
+                            tension: 0.3,
+                        }]
+                    },
+                    options: {
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                    }
+                });
             });
         </script>
     @endif

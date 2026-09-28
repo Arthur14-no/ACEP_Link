@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/utilisateurs', [AdminUserController::class, 'index'])->name('admin.utilisateurs.index');
         Route::patch('/admin/utilisateurs/{utilisateur}', [AdminUserController::class, 'updateRole'])->name('admin.utilisateurs.updateRole');
         Route::patch('/admin/utilisateurs/{utilisateur}/service', [AdminUserController::class, 'updateService'])->name('admin.utilisateurs.updateService');
+        Route::patch('/admin/utilisateurs/{utilisateur}/mot-de-passe', [AdminUserController::class, 'resetPassword'])->name('admin.utilisateurs.resetPassword');
         Route::get('/admin/journal', [JournalController::class, 'index'])->name('admin.journal.index');
 
         Route::get('/admin/salons/{salon}/membres', [SalonMembreController::class, 'index'])->name('admin.salons.membres.index');
