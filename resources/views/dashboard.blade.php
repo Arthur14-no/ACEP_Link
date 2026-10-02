@@ -72,7 +72,8 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">{{ __("You're logged in!") }}</div>
+                <div class="p-6 text-gray-900">{{ __("Vous etes connecter! RAPPELLE, creation fiche maladie :Cette fonctionnalité permet à l'administrateur de gérer l'ensemble
+des fiches de maladies disponibles sur la plateforme") }}</div>
             </div>
         </div>
     </div>
